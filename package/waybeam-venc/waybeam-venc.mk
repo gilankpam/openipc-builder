@@ -20,6 +20,7 @@ endef
 
 define WAYBEAM_VENC_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/out/star6e/venc $(TARGET_DIR)/usr/bin/venc
+	$(INSTALL) -D -m 0755 $(WAYBEAM_VENC_PKGDIR)/files/S95venc $(TARGET_DIR)/etc/init.d/S95venc
 endef
 
 $(eval $(generic-package))

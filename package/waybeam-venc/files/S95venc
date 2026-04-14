@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# S95venc — start the waybeam_venc encoder before wfb_tx (S98wifibroadcast).
+#
+
+DAEMON=venc
+BIN=/usr/bin/venc
+
+start() {
+	echo -n "Starting $DAEMON: "
+	start-stop-daemon -S -q -b -m -p /var/run/$DAEMON.pid --exec $BIN
+	echo "OK"
+}
+
+stop() {
+	echo -n "Stopping $DAEMON: "
+	start-stop-daemon -K -q -p /var/run/$DAEMON.pid
+	echo "OK"
+}
+
+case "$1" in
+	start)   start ;;
+	stop)    stop ;;
+	restart) stop; sleep 1; start ;;
+	*) echo "Usage: $0 {start|stop|restart}"; exit 1 ;;
+esac
