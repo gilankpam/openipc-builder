@@ -10,19 +10,6 @@ WIFIBROADCAST_NG_LICENSE = GPL-3.0
 
 WIFIBROADCAST_NG_DEPENDENCIES += libpcap libsodium waybeam-venc
 
-define WIFIBROADCAST_NG_INJECT_VENC_RING
-	cp $(WAYBEAM_VENC_DIR)/include/venc_ring.h $(@D)/src/venc_ring.h
-	cp $(WAYBEAM_VENC_DIR)/src/venc_ring.c     $(@D)/src/venc_ring.c
-	# venc_ring.h uses _Static_assert (C11, accepted as a gcc extension in
-	# -std=gnu99). g++ does not recognise it in -std=gnu++11, so map it to
-	# the C++ keyword via a shim before the first declaration.
-	sed -i '1i #ifdef __cplusplus\n#define _Static_assert(cond, msg) static_assert(cond, msg)\n#endif' \
-		$(@D)/src/venc_ring.h
-	# Apply the SHM input patch from waybeam_venc (adds -H flag to wfb_tx)
-	patch -p1 -d $(@D) < $(WAYBEAM_VENC_DIR)/wfb/shm-input.patch
-endef
-WIFIBROADCAST_NG_PRE_BUILD_HOOKS += WIFIBROADCAST_NG_INJECT_VENC_RING
-
 define WIFIBROADCAST_NG_BUILD_CMDS
 	$(MAKE) CC=$(TARGET_CC) CXX=$(TARGET_CXX) LDFLAGS=-s -C $(@D) all_bin
 endef
