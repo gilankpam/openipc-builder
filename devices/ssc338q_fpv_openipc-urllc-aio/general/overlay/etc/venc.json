@@ -29,7 +29,7 @@
   },
   "outgoing": {
     "enabled": true,
-    "server": "shm://venc_wfb",
+    "server": "unix://venc_wfb",
     "streamMode": "rtp",
     "maxPayloadSize": 1400,
     "connectedUdp": true,

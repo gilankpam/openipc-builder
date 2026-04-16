@@ -90,7 +90,7 @@ load_wfb() {
 
 start_broadcast() {
 	echo_log "Starting wfb_tx (SHM input: venc_wfb)"
-	wfb_tx -K "$wfb_key" -M "$mcs_index" -B "$width" -k "$fec_k" -n "$fec_n" -H venc_wfb \
+	wfb_tx -K "$wfb_key" -M "$mcs_index" -B "$width" -k "$fec_k" -n "$fec_n" -U venc_wfb \
 		-S "$stbc" -L "$ldpc" -i "$link_id" -C 8000 -J 10 -E 5000 "$wfb_dev" &> /dev/null &
 }
 
