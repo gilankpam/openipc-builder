@@ -6,4 +6,4 @@ config BR2_PACKAGE_WAYBEAM_VENC
 	  Sigmastar Star6E (Infinity6E) and Maruko (Infinity6C).
 	  Replaces Majestic on supported devices.
 
-	  https://github.com/OpenIPC/waybeam_venc
+	  https://github.com/gilankpam/waybeam_venc

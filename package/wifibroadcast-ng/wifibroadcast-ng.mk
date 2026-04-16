@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WIFIBROADCAST_NG_VERSION = ae2122c1fb70cd215bbc2e1b517b7b91f9401220
+WIFIBROADCAST_NG_VERSION = a69d0ed519aaf520cd802218857544e4a08accbb
 WIFIBROADCAST_NG_SITE = $(call github,svpcom,wfb-ng,$(WIFIBROADCAST_NG_VERSION))
 WIFIBROADCAST_NG_LICENSE = GPL-3.0
 
@@ -18,6 +18,8 @@ define WIFIBROADCAST_NG_INJECT_VENC_RING
 	# the C++ keyword via a shim before the first declaration.
 	sed -i '1i #ifdef __cplusplus\n#define _Static_assert(cond, msg) static_assert(cond, msg)\n#endif' \
 		$(@D)/src/venc_ring.h
+	# Apply the SHM input patch from waybeam_venc (adds -H flag to wfb_tx)
+	patch -p1 -d $(@D) < $(WAYBEAM_VENC_DIR)/wfb/shm-input.patch
 endef
 WIFIBROADCAST_NG_PRE_BUILD_HOOKS += WIFIBROADCAST_NG_INJECT_VENC_RING
 
