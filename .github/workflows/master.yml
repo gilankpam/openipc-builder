@@ -1,9 +1,9 @@
 name: Build
 on:
   push:
-    branches: [master]
+    branches: [master, wfb-ng-vanilla]
   pull_request:
-    branches: [master]
+    branches: [master, wfb-ng-vanilla]
   workflow_dispatch:
     inputs:
       platform:
