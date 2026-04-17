@@ -1,9 +1,7 @@
 name: Build
 on:
   push:
-    branches: [master, wfb-ng-vanilla]
   pull_request:
-    branches: [master, wfb-ng-vanilla]
   workflow_dispatch:
     inputs:
       platform:
@@ -11,7 +9,7 @@ on:
         required: false
 
 env:
-  TAG_NAME: ${{ github.ref_name == 'wfb-ng-vanilla' && 'latest-vanilla' || 'latest' }}
+  TAG_NAME: latest-${{ github.ref_name }}
 
 jobs:
   buildroot:
