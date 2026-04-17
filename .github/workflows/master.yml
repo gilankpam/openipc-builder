@@ -1,9 +1,7 @@
 name: Build
 on:
   push:
-    branches: [master]
   pull_request:
-    branches: [master]
   workflow_dispatch:
     inputs:
       platform:
@@ -11,7 +9,7 @@ on:
         required: false
 
 env:
-  TAG_NAME: latest
+  TAG_NAME: latest-${{ github.ref_name }}
 
 jobs:
   buildroot:
@@ -92,7 +90,8 @@ jobs:
         if: env.NORFW || env.NANDFW
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
+          tag_name: ${{env.TAG_NAME}}
+          target_commitish: ${{github.sha}}
           files: |
             ${{env.NORFW}}
             ${{env.NANDFW}}
