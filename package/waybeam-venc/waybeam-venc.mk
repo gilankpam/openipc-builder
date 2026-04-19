@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WAYBEAM_VENC_VERSION = 9ae26b3f2a01a8d785ea06803bd722757403e9fa
+WAYBEAM_VENC_VERSION = c703c0ff2d95f0c163aa538769bc436aa8282ba6
 WAYBEAM_VENC_SITE = https://github.com/gilankpam/waybeam_venc
 WAYBEAM_VENC_SITE_METHOD = git
 WAYBEAM_VENC_LICENSE = MIT
