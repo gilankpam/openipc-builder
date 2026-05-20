@@ -1,11 +1,11 @@
 ################################################################################
 #
-# wifibroadcast-ng (overlay: vanilla svpcom/wfb-ng, unix-socket video input)
+# wifibroadcast-ng
 #
 ################################################################################
 
-WIFIBROADCAST_NG_VERSION = 3906d73d258ae45fb50ca08fcdcba2e6954ff120
-WIFIBROADCAST_NG_SITE = $(call github,svpcom,wfb-ng,$(WIFIBROADCAST_NG_VERSION))
+WIFIBROADCAST_NG_VERSION = 2136384265924802530abba63bcc7437353d5b66
+WIFIBROADCAST_NG_SITE = $(call github,gilankpam,wfb-ng,$(WIFIBROADCAST_NG_VERSION))
 WIFIBROADCAST_NG_LICENSE = GPL-3.0
 
 WIFIBROADCAST_NG_DEPENDENCIES += libpcap libsodium
