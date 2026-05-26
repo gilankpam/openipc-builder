@@ -1,0 +1,6 @@
+config BR2_PACKAGE_FPVD
+	bool "fpvd"
+	help
+	  fpvd — supervisor daemon that owns FPV stack configuration
+	  (waybeam encoder + wfb-ng radio + msposd/mavfwd telemetry)
+	  and exposes it over HTTP+JSON.
