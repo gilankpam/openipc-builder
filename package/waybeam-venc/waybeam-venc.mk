@@ -20,8 +20,6 @@ endef
 
 define WAYBEAM_VENC_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/out/star6e/waybeam $(TARGET_DIR)/usr/bin/waybeam
-	$(INSTALL) -D -m 0755 $(@D)/init.d/S95waybeam $(TARGET_DIR)/etc/init.d/S95waybeam
-	$(INSTALL) -D -m 0644 $(WAYBEAM_VENC_PKGDIR)/files/waybeam.json $(TARGET_DIR)/etc/waybeam.json
 endef
 
 $(eval $(generic-package))
