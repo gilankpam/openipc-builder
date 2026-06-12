@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-FPVD_VERSION = 9c28e219a07689952d30e359234856f0c1078e8f
+FPVD_VERSION = 4218c8a989b69f85b9b124f6877be9da5722df47
 FPVD_SITE = $(call github,gilankpam,fpvd,$(FPVD_VERSION))
 FPVD_LICENSE = MIT
 
