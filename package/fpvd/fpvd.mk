@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-FPVD_VERSION = 4218c8a989b69f85b9b124f6877be9da5722df47
+FPVD_VERSION = 6a18c6c0bf4849114ea586159df4c791650ca445
 FPVD_SITE = $(call github,gilankpam,fpvd,$(FPVD_VERSION))
 FPVD_LICENSE = MIT
 
@@ -31,5 +31,13 @@ define FPVD_INSTALL_PROBE_FEEDER
 		$(TARGET_DIR)/usr/libexec/fpvd/probe-feeder
 endef
 FPVD_POST_INSTALL_TARGET_HOOKS += FPVD_INSTALL_PROBE_FEEDER
+
+define FPVD_INSTALL_FILES
+	$(INSTALL) -D -m 0644 $(FPVD_PKGDIR)/files/config.json \
+		$(TARGET_DIR)/etc/fpvd/config.json
+	$(INSTALL) -D -m 0644 $(FPVD_PKGDIR)/files/imx415_greg_fpvXIX_colortrans.bin \
+		$(TARGET_DIR)/etc/sensors/imx415_greg_fpvXIX_colortrans.bin
+endef
+FPVD_POST_INSTALL_TARGET_HOOKS += FPVD_INSTALL_FILES
 
 $(eval $(cmake-package))

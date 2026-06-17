@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WAYBEAM_VENC_VERSION = 22009029394026a42ede8285ee7a99039bbb06e6
+WAYBEAM_VENC_VERSION = fd4307cd6790371e0259cafa1420e8a9912080a5
 WAYBEAM_VENC_SITE = https://github.com/OpenIPC/waybeam_venc
 WAYBEAM_VENC_SITE_METHOD = git
 WAYBEAM_VENC_LICENSE = MIT
