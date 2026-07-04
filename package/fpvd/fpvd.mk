@@ -4,7 +4,10 @@
 #
 ################################################################################
 
-FPVD_VERSION = 6a18c6c0bf4849114ea586159df4c791650ca445
+# NOTE: glyph-OSD HEAD of feat/glyph-osd (PR #32). The bundled UbuntuMono Nerd
+# Font below is only useful with a fpvd binary that emits the glyph column;
+# rebump to the main merge commit once PR #32 lands.
+FPVD_VERSION = 71394130da51d1daf13d9d57ec486c810dc100ec
 FPVD_SITE = $(call github,gilankpam,fpvd,$(FPVD_VERSION))
 FPVD_LICENSE = MIT
 
@@ -37,6 +40,10 @@ define FPVD_INSTALL_FILES
 		$(TARGET_DIR)/etc/fpvd/config.json
 	$(INSTALL) -D -m 0644 $(FPVD_PKGDIR)/files/imx415_greg_fpvXIX_colortrans.bin \
 		$(TARGET_DIR)/etc/sensors/imx415_greg_fpvXIX_colortrans.bin
+	# OSD glyph font: msposd loads this fixed path; the Nerd-Font-patched
+	# (monospaced) UbuntuMono gives the OSD its icon glyphs.
+	$(INSTALL) -D -m 0644 $(FPVD_PKGDIR)/files/UbuntuMono-Regular.ttf \
+		$(TARGET_DIR)/usr/share/fonts/truetype/UbuntuMono-Regular.ttf
 endef
 FPVD_POST_INSTALL_TARGET_HOOKS += FPVD_INSTALL_FILES
 
