@@ -7,7 +7,7 @@
 # NOTE: glyph-OSD HEAD of feat/glyph-osd (PR #32). The bundled UbuntuMono Nerd
 # Font below is only useful with a fpvd binary that emits the glyph column;
 # rebump to the main merge commit once PR #32 lands.
-FPVD_VERSION = 71394130da51d1daf13d9d57ec486c810dc100ec
+FPVD_VERSION = 01b7425fe13848f343302c12a10dffa71fd985d3
 FPVD_SITE = $(call github,gilankpam,fpvd,$(FPVD_VERSION))
 FPVD_LICENSE = MIT
 

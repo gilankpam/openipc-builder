@@ -12,20 +12,16 @@
     },
     "enabled": false,
     "healthTimeoutMs": 10000,
+    "probe": {
+      "enabled": false
+    },
     "roiQp": {
       "floor": -24,
       "lowAnchorKbps": 2000,
       "step": 3,
       "thresholdKbps": 6000
     },
-    "safe": {
-      "bitrateKbps": 2000,
-      "deadlineMs": 30,
-      "k": 8,
-      "mcs": 1,
-      "n": 12,
-      "overheadPct": 100
-    }
+    "txPowerControl": false
   },
   "image": {
     "flip": false,
@@ -52,7 +48,8 @@
     "mcs": 1,
     "mtu": 1500,
     "stbc": true,
-    "txPowerDbm": 0,
+    "txPowerDbm": "auto",
+    "videoEncryption": false,
     "width": 20,
     "wlanAdapter": null
   },
@@ -77,7 +74,7 @@
     "bitrate": 8192,
     "codec": "h265",
     "fps": 60,
-    "gopSize": 1,
+    "gopSize": 1.0,
     "qpDelta": -4,
     "rcMode": "cbr",
     "resilience": "off",
