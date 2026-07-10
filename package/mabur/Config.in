@@ -1,0 +1,11 @@
+config BR2_PACKAGE_MABUR
+	bool "mabur"
+	default n
+	select BR2_PACKAGE_LIBUSB
+	help
+	  Drone-side FPV streamer bridge: consumes waybeam's shm:// RTP
+	  ring, applies per-layer RS UEP FEC + SBI framing, and injects
+	  over a Realtek 8812EU via the devourer userspace driver, with
+	  adaptive-link (RCF/DISC) feedback and MAX_RANGE failsafe.
+
+	  https://github.com/gilankpam/mabur
