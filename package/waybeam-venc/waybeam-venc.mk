@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WAYBEAM_VENC_VERSION = fd4307cd6790371e0259cafa1420e8a9912080a5
+WAYBEAM_VENC_VERSION = 82f72acd812677996dd5ff545420beb68a05377c
 WAYBEAM_VENC_SITE = https://github.com/OpenIPC/waybeam_venc
 WAYBEAM_VENC_SITE_METHOD = git
 WAYBEAM_VENC_LICENSE = MIT
@@ -20,6 +20,8 @@ endef
 
 define WAYBEAM_VENC_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/out/star6e/waybeam $(TARGET_DIR)/usr/bin/waybeam
+	$(INSTALL) -D -m 0755 $(@D)/init.d/S95waybeam $(TARGET_DIR)/etc/init.d/S95waybeam
+	$(INSTALL) -D -m 0644 $(@D)/config/waybeam.default.json $(TARGET_DIR)/etc/waybeam.json
 endef
 
 $(eval $(generic-package))
