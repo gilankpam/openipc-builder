@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-MABUR_VERSION = 0a3bb38279c23563e688bfbb0da436287f631826
+MABUR_VERSION = 8bdcbb5da03832f5384e7f20683a7eea0151b154
 MABUR_SITE = https://github.com/gilankpam/mabur
 MABUR_SITE_METHOD = git
 MABUR_GIT_SUBMODULES = YES
@@ -19,11 +19,16 @@ MABUR_SUPPORTS_IN_SOURCE_BUILD = NO
 # Forcing it OFF links devourer (and mabur_common) statically into maburd, the
 # same self-contained layout tools/build-arm.sh produces; the only remaining
 # runtime deps are Buildroot's own libusb/libstdc++/libc, which are on the image.
+# DEVOURER_LOG_MAX_LEVEL=WARN: compile out info/debug/trace. devourer logs one
+# info line per TX frame ("bulk_send EP 5 OK N bytes"); at maburd's frame rate
+# that floods RAM-backed /tmp/mabur.log until the next respawn truncates it.
+# tools/build-arm.sh sets the same floor for the standalone static binary.
 MABUR_CONF_OPTS = \
 	-DDEVOURER_DIR=$(@D)/third_party/devourer \
 	-DMABUR_BUILD_TESTS=OFF \
 	-DMABUR_BUILD_DRONE=ON \
-	-DBUILD_SHARED_LIBS=OFF
+	-DBUILD_SHARED_LIBS=OFF \
+	-DDEVOURER_LOG_MAX_LEVEL=WARN
 
 define MABUR_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(MABUR_BUILDDIR)/drone/maburd $(TARGET_DIR)/usr/bin/maburd
