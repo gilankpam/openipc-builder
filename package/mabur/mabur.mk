@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-MABUR_VERSION = 8bdcbb5da03832f5384e7f20683a7eea0151b154
+MABUR_VERSION = 641bdeded57cf42304fc97283ea18ddbb216bc7c
 MABUR_SITE = https://github.com/gilankpam/mabur
 MABUR_SITE_METHOD = git
 MABUR_GIT_SUBMODULES = YES
