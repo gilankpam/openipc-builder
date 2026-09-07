@@ -30,7 +30,27 @@ BR2_PACKAGE_UBOOT_TOOLS=y
 BR2_PACKAGE_ZLIB=y
 # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
 BR2_TARGET_ROOTFS_SQUASHFS=y
-BR2_TARGET_ROOTFS_SQUASHFS4_XZ=y
+# LZO, not XZ. squashfs decompresses lazily on every file read, so the
+# compressor is paid throughout userspace startup, not once. Measured on
+# ssc338q: rootfs-mounted -> "Starting network" 1.716 s -> 1.13 s, a 0.58 s
+# saving reproducible to 35 ms across runs. Pre-kernel and the mount itself
+# are unchanged, as expected.
+#
+# It costs 4.26 MB -> 5.42 MB of flash, and that crosses a threshold worth
+# knowing about: U-Boot sizes the rootfs partition from the squashfs
+# superblock on every `sf probe` (common/cmd_sf.c, `bytes + 0x1000 <
+# 0x500000` -> rootmtd=5120k else 8192k). So this image moves the partition
+# from 5120k to 8192k automatically. A *fresh* flash is fine, but an
+# incremental sysupgrade from an XZ image cannot bootstrap it: the partition
+# is still 5 MB at that moment and flashcp refuses with "bigger than
+# /dev/mtd3" -- which sysupgrade then reports as success, because it does
+# not check flashcp's exit status. Pin mtdparts to 8192k literally for one
+# boot to break the cycle.
+#
+# LZ4 would be faster still but the kernel is built without
+# CONFIG_SQUASHFS_LZ4 (CONFIG_SQUASHFS_LZO=y is already there), so it would
+# need a kernel config change and an unmountable rootfs is the failure mode.
+BR2_TARGET_ROOTFS_SQUASHFS4_LZO=y
 
 # OpenIPC
 BR2_OPENIPC_SOC_VENDOR="sigmastar"
