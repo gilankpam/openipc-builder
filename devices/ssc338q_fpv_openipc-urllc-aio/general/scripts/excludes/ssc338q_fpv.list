@@ -25,3 +25,7 @@
 /usr/lib/libmi_rgn.so
 /usr/lib/libmi_shadow.so
 /usr/lib/libmi_vdf.so
+#
+# Renamed to S38vendor so the MI stack and maburd start before network,
+# ntpd, dropbear and crond instead of after them. See the device overlay.
+/etc/init.d/S70vendor

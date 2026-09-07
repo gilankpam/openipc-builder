@@ -54,7 +54,7 @@ set_sensor() {
 #
 # KEPT despite maburd never calling them -- mi_vpe links against both, and
 # removing them makes insmod fail with "unknown symbol in module", after
-# which maburd segfaults and the S96mabur wrapper respawns it forever:
+# which maburd segfaults and the S39mabur wrapper respawns it forever:
 #
 #   mi_ldc     624k   mi_vpe needs 27 symbols from it
 #   mi_rgn      98k   mi_vpe needs 2 symbols from it

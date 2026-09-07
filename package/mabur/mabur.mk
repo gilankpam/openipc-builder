@@ -73,7 +73,14 @@ MABUR_CONF_OPTS = \
 # respawns maburd forever at 2 s.
 define MABUR_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(MABUR_BUILDDIR)/drone/maburd $(TARGET_DIR)/usr/bin/maburd
-	$(INSTALL) -D -m 0755 $(@D)/bundle/S96mabur $(TARGET_DIR)/etc/init.d/S96mabur
+	# Installed as S39mabur, not S96mabur: busybox rcS runs /etc/init.d/S*
+	# strictly serially in lexical order, and at S96 maburd started behind
+	# network, ntpd, dropbear and crond, none of which video needs.  Order is
+	# S38mdev < S38vendor < S39mabur < S40network -- mdev first because maburd
+	# needs the device nodes, and S38vendor (load_sigmastar, renamed from
+	# S70vendor in the device overlay) before maburd because it insmods the MI
+	# modules maburd dlopens against.
+	$(INSTALL) -D -m 0755 $(@D)/bundle/S96mabur $(TARGET_DIR)/etc/init.d/S39mabur
 	if [ -f $(@D)/bundle/mabur.default.toml ]; then \
 		$(INSTALL) -D -m 0644 $(@D)/bundle/mabur.default.toml $(TARGET_DIR)/etc/mabur.toml; \
 	else \
