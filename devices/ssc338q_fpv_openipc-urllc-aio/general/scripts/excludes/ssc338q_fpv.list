@@ -27,7 +27,7 @@
 /usr/lib/libmi_vdf.so
 #
 # The MI stack is no longer loaded by an init script: maburd runs
-# load_sigmastar itself (S00mabur runs first, venc.module_loader). S70vendor
+# load_sigmastar itself (S00mabur runs first, a constant in maburd). S70vendor
 # was renamed to S38vendor on 2026-09-08 and dropped on 2026-09-09; the stock
 # S70vendor must still not ship, or the chain runs twice.
 /etc/init.d/S70vendor
