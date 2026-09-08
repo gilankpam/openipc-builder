@@ -76,14 +76,17 @@ MABUR_CONF_OPTS = \
 # repo (tests/test_config.cpp pins it), not only on the device.
 define MABUR_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(MABUR_BUILDDIR)/drone/maburd $(TARGET_DIR)/usr/bin/maburd
-	# Installed as S39mabur, not S96mabur: busybox rcS runs /etc/init.d/S*
-	# strictly serially in lexical order, and at S96 maburd started behind
-	# network, ntpd, dropbear and crond, none of which video needs.  Order is
-	# S38mdev < S38vendor < S39mabur < S40network -- mdev first because maburd
-	# needs the device nodes, and S38vendor (load_sigmastar, renamed from
-	# S70vendor in the device overlay) before maburd because it insmods the MI
-	# modules maburd dlopens against.
-	$(INSTALL) -D -m 0755 $(@D)/bundle/S96mabur $(TARGET_DIR)/etc/init.d/S39mabur
+	# Installed as S00mabur, not S96mabur: busybox rcS runs /etc/init.d/S*
+	# strictly serially in lexical order, and maburd goes FIRST -- ahead of
+	# seedrng, syslogd, fake-hwclock, sysctl, customizer, mdev, network, ntpd,
+	# dropbear and crond, none of which video needs (devtmpfs makes the
+	# device nodes; mdev only adds SD-card automount rules). The MI modules
+	# are no longer loaded by an init script at all: maburd runs
+	# load_sigmastar itself (venc.module_loader) after its USB port reset,
+	# so the insmod chain lands under the radio bring-up instead of ahead of
+	# maburd's exec. Measured 2026-09-09: first AU on the GS 5.40 -> 4.37 s
+	# of uptime (mabur docs/boot-time-findings-2026-09-07.md, "rcS, stamped").
+	$(INSTALL) -D -m 0755 $(@D)/bundle/S96mabur $(TARGET_DIR)/etc/init.d/S00mabur
 	$(INSTALL) -D -m 0644 $(@D)/bundle/mabur.default.toml $(TARGET_DIR)/etc/mabur.toml
 endef
 

@@ -26,6 +26,8 @@
 /usr/lib/libmi_shadow.so
 /usr/lib/libmi_vdf.so
 #
-# Renamed to S38vendor so the MI stack and maburd start before network,
-# ntpd, dropbear and crond instead of after them. See the device overlay.
+# The MI stack is no longer loaded by an init script: maburd runs
+# load_sigmastar itself (S00mabur runs first, venc.module_loader). S70vendor
+# was renamed to S38vendor on 2026-09-08 and dropped on 2026-09-09; the stock
+# S70vendor must still not ship, or the chain runs twice.
 /etc/init.d/S70vendor
