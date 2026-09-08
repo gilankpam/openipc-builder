@@ -64,13 +64,16 @@ MABUR_CONF_OPTS = \
 	-DDEVOURER_KESTREL_8852B=OFF \
 	-DDEVOURER_KESTREL_8852C=OFF
 
-# The default config is installed under whichever name the checkout ships,
-# because MABUR_VERSION floats: master ships bundle/mabur.default.json today,
-# while the pending TOML cutover (branch toml-config) ships
-# bundle/mabur.default.toml with S96mabur's CONF= changed to match. Picking the
-# file that exists keeps config, init script and binary from the same commit --
-# which is the whole point, since an unknown key fails boot and the wrapper then
-# respawns maburd forever at 2 s.
+# Config, init script and binary all come from the same floating master
+# checkout, which is the whole point: an unknown key fails boot and the wrapper
+# then respawns maburd forever at 2 s, so the three must never be mixed across
+# commits. The json/toml either-or that used to live here is gone -- the TOML
+# cutover landed on master and bundle/mabur.default.json no longer exists.
+#
+# Since 2026-09-08 that bundle file is not a neutral seed but a verbatim copy
+# of the drone's own /etc/mabur.toml, so a fresh flash boots the flight
+# configuration rather than something nobody has flown. Retune it in the mabur
+# repo (tests/test_config.cpp pins it), not only on the device.
 define MABUR_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(MABUR_BUILDDIR)/drone/maburd $(TARGET_DIR)/usr/bin/maburd
 	# Installed as S39mabur, not S96mabur: busybox rcS runs /etc/init.d/S*
@@ -81,11 +84,7 @@ define MABUR_INSTALL_TARGET_CMDS
 	# S70vendor in the device overlay) before maburd because it insmods the MI
 	# modules maburd dlopens against.
 	$(INSTALL) -D -m 0755 $(@D)/bundle/S96mabur $(TARGET_DIR)/etc/init.d/S39mabur
-	if [ -f $(@D)/bundle/mabur.default.toml ]; then \
-		$(INSTALL) -D -m 0644 $(@D)/bundle/mabur.default.toml $(TARGET_DIR)/etc/mabur.toml; \
-	else \
-		$(INSTALL) -D -m 0644 $(@D)/bundle/mabur.default.json $(TARGET_DIR)/etc/mabur.json; \
-	fi
+	$(INSTALL) -D -m 0644 $(@D)/bundle/mabur.default.toml $(TARGET_DIR)/etc/mabur.toml
 endef
 
 $(eval $(cmake-package))
