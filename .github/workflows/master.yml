@@ -1,7 +1,6 @@
 name: Build
 on:
   push:
-  pull_request:
   workflow_dispatch:
     inputs:
       platform:
@@ -86,15 +85,47 @@ jobs:
             exit 1
           fi
 
+          # builder.sh builds U-Boot from our fork after the device build and
+          # leaves it in output/images; it is absent for SoCs with no family
+          # mapping, so ship it only when it is there.  Padded to the whole
+          # 256k boot partition, i.e. the one to flashcp to /dev/mtd0.
+          SOC=$(echo ${NAME} | cut -d_ -f1)
+          UBOOT=output/images/u-boot-${SOC}-nor-padded.bin
+          if [ -f ${UBOOT} ]; then
+            echo UBOOT=openipc/${UBOOT} >> ${GITHUB_ENV}
+          fi
+
+          # Release body: a build header, the md5 of the bootloader -- the
+          # runbook has the operator compare md5 twice, before flashing and
+          # again on the readback, and without a published value there is
+          # nothing to compare against -- then the runbook itself.
+          {
+            echo "- Platform: \`${NAME}\`"
+            echo "- Commit: \`${GIT_HASH}\` (\`${GIT_BRANCH}\`)"
+            if [ -f ${UBOOT} ]; then
+              echo
+              echo "| file | md5 |"
+              echo "|---|---|"
+              echo "| \`$(basename ${UBOOT})\` | \`$(md5sum ${UBOOT} | cut -d' ' -f1)\` |"
+              echo
+              # Guarded: `run:` steps are `bash -e`, and a bad release
+              # body is not worth failing a firmware build over.
+              if [ -f ../docs/flash-uboot.md ]; then cat ../docs/flash-uboot.md; fi
+            fi
+          } > ../release-notes.md
+          echo NOTES=release-notes.md >> ${GITHUB_ENV}
+
       - name: Upload firmware
         if: env.NORFW || env.NANDFW
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{env.TAG_NAME}}
+          body_path: ${{env.NOTES}}
           target_commitish: ${{github.sha}}
           files: |
             ${{env.NORFW}}
             ${{env.NANDFW}}
+            ${{env.UBOOT}}
 
       - name: Send binary
         if: env.NORFW

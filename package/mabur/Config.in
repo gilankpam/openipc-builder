@@ -1,0 +1,15 @@
+config BR2_PACKAGE_MABUR
+	bool "mabur"
+	default n
+	select BR2_PACKAGE_LIBUSB
+	select BR2_PACKAGE_DEVOURER
+	help
+	  RTP-free FPV video link, drone side. maburd drives the SigmaStar
+	  MI encoder in-process, applies per-layer RS UEP FEC + SBI framing,
+	  and injects over a Realtek 8812EU via the devourer userspace
+	  driver, with adaptive-link (RCF/DISC) feedback, air-clock pacing
+	  and MAX_RANGE failsafe. One daemon: the separate encoder process
+	  was folded into maburd, which drives the SigmaStar MI encoder
+	  in-process.
+
+	  https://github.com/gilankpam/mabur
