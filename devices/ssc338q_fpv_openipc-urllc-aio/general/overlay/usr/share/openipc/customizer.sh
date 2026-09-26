@@ -3,8 +3,10 @@
 # Run once by S30customizer, guarded by /etc/custom.ok in the overlay -- so
 # it re-runs whenever the overlay is wiped, which `sysupgrade -n` does.
 
-# Set custom upgrade url
-fw_setenv upgrade 'https://github.com/OpenIPC/builder/releases/download/latest/ssc338q_fpv_openipc-urllc-aio-nor.tgz'
+# Set custom upgrade url -- THIS fork's release, not upstream OpenIPC's: the
+# upstream ssc338q_fpv_openipc-urllc-aio image carries no maburd, so a
+# sysupgrade pulling it would silently replace the video link.
+fw_setenv upgrade 'https://github.com/gilankpam/openipc-builder/releases/download/latest-master/ssc338q_fpv_openipc-urllc-aio-nor.tgz'
 
 # Boot-time settings, shipped in the image so a device does not need them
 # typed in by hand.  Measured in docs/boot-time-findings-2026-09-07.md
