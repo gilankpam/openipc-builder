@@ -171,6 +171,12 @@ echo_c 33 "\nCopying extra packages"
 copy_extra_packages
 
 echo_c 33 "\nCopying device files"
+# Every board here is a mabur drone on the same SSC338Q boot chain, so the
+# shared overlay (rcS, load_sigmastar, sensor bins, ...) lives once in
+# devices/_mabur-common and the board dir, copied on top, holds only what
+# differs (defconfig, customizer.sh). _mabur-common has no *_defconfig, so
+# select_device never offers it as a board.
+cp -afv ${BUILDER_DIR}/devices/_mabur-common/* ${FIRMWARE_DIR}
 cp -afv ${BUILDER_DIR}/${ITEM}/* ${FIRMWARE_DIR}
 
 echo_c 33 "\nBuilding the device"

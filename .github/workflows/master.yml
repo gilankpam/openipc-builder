@@ -20,6 +20,7 @@ jobs:
       matrix:
         platform:
           - ssc338q_fpv_openipc-urllc-aio
+          - ssc338q_fpv_emax-wyvern-link-alpha
 
     steps:
       - name: Checkout source

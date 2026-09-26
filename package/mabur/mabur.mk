@@ -40,9 +40,12 @@ MABUR_DEPENDENCIES = libusb host-pkgconf devourer
 # info line per TX frame ("bulk_send EP 5 OK N bytes"); at maburd's frame rate
 # that floods RAM-backed /tmp/mabur.log until the next respawn truncates it.
 #
-# The DEVOURER_* chip selects mirror tools/build-arm.sh exactly. Without them
-# every Realtek family is compiled in -- including DEVOURER_8733B, which
-# defaults ON upstream and must be OFF here. Keep the two lists in step.
+# The DEVOURER_* chip selects mirror tools/build-arm.sh. Without them every
+# Realtek family is compiled in -- including DEVOURER_8733B, which defaults ON
+# upstream and must be OFF here. Keep the two lists in step. The one
+# deliberate difference: the Jaguar3 die is the board's Kconfig radio choice
+# (Config.in), where build-arm.sh is always the 8822E -- the bench drone's
+# card. Exactly one of the two is ON.
 #
 # MABUR_BUILD_GS/LINKBENCH=OFF: this is the drone image. maburgs and the bench
 # harnesses are neither installed nor useful on the SSC338Q.
@@ -58,11 +61,15 @@ MABUR_CONF_OPTS = \
 	-DDEVOURER_8814=OFF \
 	-DDEVOURER_JAGUAR2_8822B=OFF \
 	-DDEVOURER_JAGUAR2_8821C=OFF \
-	-DDEVOURER_JAGUAR3_8822C=OFF \
-	-DDEVOURER_JAGUAR3_8822E=ON \
 	-DDEVOURER_8733B=OFF \
 	-DDEVOURER_KESTREL_8852B=OFF \
 	-DDEVOURER_KESTREL_8852C=OFF
+
+ifeq ($(BR2_PACKAGE_MABUR_RADIO_8812CU),y)
+MABUR_CONF_OPTS += -DDEVOURER_JAGUAR3_8822C=ON -DDEVOURER_JAGUAR3_8822E=OFF
+else
+MABUR_CONF_OPTS += -DDEVOURER_JAGUAR3_8822C=OFF -DDEVOURER_JAGUAR3_8822E=ON
+endif
 
 # Config, init script and binary all come from the same floating master
 # checkout, which is the whole point: an unknown key fails boot and the wrapper
