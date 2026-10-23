@@ -10,7 +10,12 @@
 # already has checked out), so resolve it to a commit id here.
 MABUR_SITE = https://github.com/gilankpam/mabur
 MABUR_BRANCH = master
+# A MABUR_VERSION already in the environment wins: the release workflow
+# resolves the commit once and passes it in, so the release it names is
+# the commit that was built even if the branch moves mid-build.
+ifeq ($(MABUR_VERSION),)
 MABUR_VERSION := $(shell git ls-remote $(MABUR_SITE) refs/heads/$(MABUR_BRANCH) | cut -f1)
+endif
 ifeq ($(MABUR_VERSION),)
 $(error mabur: cannot resolve $(MABUR_BRANCH) at $(MABUR_SITE) (no network?))
 endif

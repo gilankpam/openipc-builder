@@ -7,9 +7,6 @@ on:
         description: Platform
         required: false
 
-env:
-  TAG_NAME: latest-${{ github.ref_name }}
-
 jobs:
   buildroot:
     name: Firmware
@@ -34,6 +31,22 @@ jobs:
           if [ -z ${INPUT} ] || [ ${INPUT} = ${MATRIX} ]; then
             echo RUN=${MATRIX} >> ${GITHUB_ENV}
           fi
+
+      # Resolve mabur and devourer master once, up front. The package .mk
+      # files take MABUR_VERSION/DEVOURER_VERSION from the environment, so the
+      # build uses exactly these commits and the release is named after the
+      # mabur one -- the same mabur-<sha8> name the ground-station image repo
+      # gives its build of that commit, which is how a VTX and a GS release
+      # are matched.
+      - name: Resolve sources
+        if: env.RUN
+        run: |
+          MABUR_VERSION=$(git ls-remote https://github.com/gilankpam/mabur refs/heads/master | cut -f1)
+          DEVOURER_VERSION=$(git ls-remote https://github.com/gilankpam/devourer refs/heads/master | cut -f1)
+          [ -n "${MABUR_VERSION}" ] && [ -n "${DEVOURER_VERSION}" ]
+          echo MABUR_VERSION=${MABUR_VERSION} >> ${GITHUB_ENV}
+          echo DEVOURER_VERSION=${DEVOURER_VERSION} >> ${GITHUB_ENV}
+          echo TAG_NAME=mabur-${MABUR_VERSION:0:8} >> ${GITHUB_ENV}
 
       - name: Setup ccache
         if: env.RUN
@@ -100,8 +113,14 @@ jobs:
           # again on the readback, and without a published value there is
           # nothing to compare against -- then the runbook itself.
           {
+            echo "VTX firmware built from mabur \`${MABUR_VERSION:0:8}\`."
+            echo "Flash it with the ground-station release of the same name:"
+            echo "https://github.com/gilankpam/sbc-groundstations/releases/tag/${TAG_NAME}"
+            echo
             echo "- Platform: \`${NAME}\`"
-            echo "- Commit: \`${GIT_HASH}\` (\`${GIT_BRANCH}\`)"
+            echo "- mabur: \`${MABUR_VERSION}\`"
+            echo "- devourer: \`${DEVOURER_VERSION}\`"
+            echo "- Builder commit: \`${GIT_HASH}\` (\`${GIT_BRANCH}\`)"
             if [ -f ${UBOOT} ]; then
               echo
               echo "| file | md5 |"
@@ -115,11 +134,16 @@ jobs:
           } > ../release-notes.md
           echo NOTES=release-notes.md >> ${GITHUB_ENV}
 
+      # Only a manual run publishes; a push just builds. A rerun of the same
+      # mabur commit replaces that release's files.
       - name: Upload firmware
-        if: env.NORFW || env.NANDFW
+        if: (env.NORFW || env.NANDFW) && github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{env.TAG_NAME}}
+          name: ${{env.TAG_NAME}}
+          prerelease: false
+          make_latest: true
           body_path: ${{env.NOTES}}
           target_commitish: ${{github.sha}}
           files: |
