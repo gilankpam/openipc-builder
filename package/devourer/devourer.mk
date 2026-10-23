@@ -21,7 +21,12 @@
 # was reused forever. A SHA that moves with the branch produces a new tarball.
 DEVOURER_SITE = https://github.com/gilankpam/devourer
 DEVOURER_BRANCH = master
+# A DEVOURER_VERSION already in the environment wins: the release workflow
+# resolves the commit once and passes it in, so the release it names is
+# the commit that was built even if the branch moves mid-build.
+ifeq ($(DEVOURER_VERSION),)
 DEVOURER_VERSION := $(shell git ls-remote $(DEVOURER_SITE) refs/heads/$(DEVOURER_BRANCH) | cut -f1)
+endif
 ifeq ($(DEVOURER_VERSION),)
 $(error devourer: cannot resolve $(DEVOURER_BRANCH) at $(DEVOURER_SITE) (no network?))
 endif
