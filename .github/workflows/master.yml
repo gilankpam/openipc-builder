@@ -43,7 +43,9 @@ jobs:
         run: |
           MABUR_VERSION=$(git ls-remote https://github.com/gilankpam/mabur refs/heads/master | cut -f1)
           DEVOURER_VERSION=$(git ls-remote https://github.com/gilankpam/devourer refs/heads/master | cut -f1)
-          [ -n "${MABUR_VERSION}" ] && [ -n "${DEVOURER_VERSION}" ]
+          if [ -z "${MABUR_VERSION}" ] || [ -z "${DEVOURER_VERSION}" ]; then
+            exit 1
+          fi
           echo MABUR_VERSION=${MABUR_VERSION} >> ${GITHUB_ENV}
           echo DEVOURER_VERSION=${DEVOURER_VERSION} >> ${GITHUB_ENV}
           echo TAG_NAME=mabur-${MABUR_VERSION:0:8} >> ${GITHUB_ENV}
