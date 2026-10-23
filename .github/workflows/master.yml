@@ -120,7 +120,6 @@ jobs:
             echo "Flash it with the ground-station release of the same name:"
             echo "https://github.com/gilankpam/sbc-groundstations/releases/tag/${TAG_NAME}"
             echo
-            echo "- Platform: \`${NAME}\`"
             echo "- mabur: \`${MABUR_VERSION}\`"
             echo "- devourer: \`${DEVOURER_VERSION}\`"
             echo "- Builder commit: \`${GIT_HASH}\` (\`${GIT_BRANCH}\`)"
@@ -137,14 +136,14 @@ jobs:
           } > ../release-notes.md
           echo NOTES=release-notes.md >> ${GITHUB_ENV}
 
-      # Only a manual run publishes; a push just builds. A rerun of the same
-      # mabur commit replaces that release's files. No target_commitish: the
+      # Only a manual run on master publishes; a push just builds. A rerun of
+      # the same mabur commit replaces that release's files. Every board in
+      # the matrix uploads into the same release. No target_commitish: the
       # GITHUB_TOKEN may not point a tag at a commit that changes a workflow
-      # file ("Resource not accessible by integration"), and this branch's
-      # workflow differs from master's, so the tag is left to default to
-      # master and the notes carry the builder commit instead.
+      # file ("Resource not accessible by integration"); a new tag defaults
+      # to master's head and the notes carry the builder commit.
       - name: Upload firmware
-        if: (env.NORFW || env.NANDFW) && github.event_name == 'workflow_dispatch'
+        if: (env.NORFW || env.NANDFW) && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{env.TAG_NAME}}

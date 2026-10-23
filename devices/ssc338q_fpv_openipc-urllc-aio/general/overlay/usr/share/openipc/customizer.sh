@@ -6,7 +6,10 @@
 # Set custom upgrade url -- THIS fork's release, not upstream OpenIPC's: the
 # upstream ssc338q_fpv_openipc-urllc-aio image carries no maburd, so a
 # sysupgrade pulling it would silently replace the video link.
-fw_setenv upgrade 'https://github.com/gilankpam/openipc-builder/releases/download/latest-master/ssc338q_fpv_openipc-urllc-aio-nor.tgz'
+# releases/latest is whichever release GitHub marks Latest: the newest
+# mabur-<sha8> build. Flash the ground station from the release of the same
+# name, or the pair has no link.
+fw_setenv upgrade 'https://github.com/gilankpam/openipc-builder/releases/latest/download/ssc338q_fpv_openipc-urllc-aio-nor.tgz'
 
 # Boot-time settings, shipped in the image so a device does not need them
 # typed in by hand.  Measured in docs/boot-time-findings-2026-09-07.md
