@@ -138,7 +138,11 @@ jobs:
           echo NOTES=release-notes.md >> ${GITHUB_ENV}
 
       # Only a manual run publishes; a push just builds. A rerun of the same
-      # mabur commit replaces that release's files.
+      # mabur commit replaces that release's files. No target_commitish: the
+      # GITHUB_TOKEN may not point a tag at a commit that changes a workflow
+      # file ("Resource not accessible by integration"), and this branch's
+      # workflow differs from master's, so the tag is left to default to
+      # master and the notes carry the builder commit instead.
       - name: Upload firmware
         if: (env.NORFW || env.NANDFW) && github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v2
@@ -148,7 +152,6 @@ jobs:
           prerelease: false
           make_latest: true
           body_path: ${{env.NOTES}}
-          target_commitish: ${{github.sha}}
           files: |
             ${{env.NORFW}}
             ${{env.NANDFW}}
