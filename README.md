@@ -22,6 +22,10 @@ EMAX Wyvern Link Alpha   SSC338Q      IMX415    RTL8812CU_USB    NOR_16M   untes
 
 ### Device setup
 
+A board that no longer boots can be re-flashed from an SD card, with no
+console or programmer: see [docs/sd-recovery.md](docs/sd-recovery.md).
+Check `fw_printenv baseaddr` reads `0x21000000` while the board still boots.
+
 #### WiFi Settings
 Run these commands and enjoy:
 ```
