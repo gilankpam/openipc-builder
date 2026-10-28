@@ -1,6 +1,10 @@
 name: Build
 on:
+  # master only: a branch or PR push builds nothing. A firmware build is
+  # ~10 min per board, and a release only ever comes from a manual run on
+  # master (see the release step).
   push:
+    branches: [master]
   workflow_dispatch:
     inputs:
       platform:
