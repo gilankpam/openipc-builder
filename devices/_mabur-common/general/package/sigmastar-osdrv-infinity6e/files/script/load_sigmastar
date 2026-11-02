@@ -31,8 +31,9 @@ set_sensor() {
 	case $SENSOR in
 		imx415)
 			# waybeam_venc's star6e IMX415 driver: maburd picks its sensor
-			# modes by geometry (1920x1080@90 full view, 1728x972@100,
-			# 1728x816@120, 3840x2160@33), which the stock module lacks.
+			# modes by geometry -- binned 1920x1080@90 full view,
+			# 1728x972@100, 1728x816@120; native 2944x1656@60 and
+			# 2304x1296@100; 3840x2160@33 -- which the stock module lacks.
 			insmod $MODULE/sensor_imx415_star6e.ko chmap=1
 			;;
 		gc2053|gc4653|imx274|imx307|imx335|imx347|sc501ai|sc8235)
